@@ -1,0 +1,44 @@
+<div class="spinner-container" *ngIf="loading() " else notLoading>
+  <div class="spinner"></div>
+</div>
+
+<div class="tabla-responsive" #notLoading>">
+  <h2 class="tabla-titulo">Listado de Pacientes</h2>
+  <table class="tabla-pacientes">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>DNI</th>
+        <th>Fecha de nacimiento</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (paciente of pacientes(); track paciente.id) {
+        <tr>
+          <td>{{ paciente.nombre }}</td>
+          <td>{{ paciente.dni }}</td>
+          <td>{{ paciente.fechaNacimiento | date: 'longDate' }}</td>
+          <td class="acciones">
+            @for (accion of acciones; track accion.label) {
+              <button
+                class="btn-accion"
+                (click)="accion.callback(paciente)"
+                [disabled]="accion.disabled"
+              >
+                {{ accion.label }}
+              </button>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<app-evolucion-form
+  *ngIf="formularioVisible && pacienteSeleccionado"
+  [paciente]="pacienteSeleccionado"
+  (guardarEvolucion)="onGuardarEvolucion($event, pacienteSeleccionado)"
+  (cancelarFormulario)="onCancelarFormulario()"
+/>

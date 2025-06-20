@@ -1,0 +1,32 @@
+<div class="modal-overlay">
+  <div class="modal-evolucion-estilo">
+    <h2>Nueva Evolución</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-block">
+        <label>Nombre del Paciente</label>
+        <input type="text" [value]="paciente()?.nombre" disabled />
+      </div>
+
+      <div class="form-block">
+        <label for="fecha">Fecha de la Evolución</label>
+        <input id="fecha" type="date" formControlName="fecha" />
+      </div>
+
+      <div class="form-block">
+        <label for="descripcion">Descripción</label>
+        <textarea
+          id="descripcion"
+          formControlName="descripcion"
+          rows="4"
+          placeholder="Escribe aquí la descripción de la evolución..."
+        ></textarea>
+      </div>
+
+      <div class="botones-modal">
+        <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+        <button type="submit" class="btn-guardar" [disabled]="form.invalid">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
