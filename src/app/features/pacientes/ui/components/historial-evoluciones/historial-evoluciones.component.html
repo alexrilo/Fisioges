@@ -1,0 +1,23 @@
+<div class="historial-container">
+  <h1 class="historial-titulo">Historial de Evoluciones de {{ paciente()?.nombre }}</h1>
+  <p class="historial-subtitulo">Gestiona y visualiza el historial de cada paciente.</p>
+
+  <div class="evoluciones-grid">
+    @for (evo of evoluciones(); track evo.id) {
+    @let i = $index;
+    <div class="card-evolucion" (click)="selectEvolucion(evo)">
+      <h3>Evolución {{ i + 1 }}</h3>
+      <p>{{ evo.fecha | date: 'longDate' }}</p>
+    </div>
+    }
+
+  </div>
+
+  <div class="acciones-footer">
+    <button class="btn-cerrar" (click)="cerrar()">Cerrar</button>
+  </div>
+</div>
+
+
+<app-evolucion-form *ngIf="evolucionSelected && paciente" [paciente]="paciente()" [evolucion]="evolucionSelected"
+  (cancelarFormulario)="evolucionSelected = null" />

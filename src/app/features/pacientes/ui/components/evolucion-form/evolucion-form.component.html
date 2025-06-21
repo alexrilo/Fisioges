@@ -15,17 +15,21 @@
 
       <div class="form-block">
         <label for="descripcion">Descripción</label>
-        <textarea
-          id="descripcion"
-          formControlName="descripcion"
-          rows="4"
-          placeholder="Escribe aquí la descripción de la evolución..."
-        ></textarea>
+        <div class="descripcion-audio-wrapper">
+          <textarea id="descripcion" formControlName="descripcion" rows="4"
+            placeholder="Escribe aquí la descripción de la evolución..."></textarea>
+          <button type="button" class="btn-microfono" (click)="activarMicrofono()">
+            🎤
+          </button>
+        </div>
       </div>
+
 
       <div class="botones-modal">
         <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+        @if (!evolucion()) {
         <button type="submit" class="btn-guardar" [disabled]="form.invalid">Guardar</button>
+        }
       </div>
     </form>
   </div>

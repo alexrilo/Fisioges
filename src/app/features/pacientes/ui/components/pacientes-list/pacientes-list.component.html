@@ -1,8 +1,8 @@
-<div class="spinner-container" *ngIf="loading() " else notLoading>
+<div class="spinner-container" *ngIf="loading() ">
   <div class="spinner"></div>
 </div>
 
-<div class="tabla-responsive" #notLoading>">
+<div class="tabla-responsive" *ngIf="!loading()">
   <h2 class="tabla-titulo">Listado de Pacientes</h2>
   <table class="tabla-pacientes">
     <thead>
@@ -39,6 +39,14 @@
 <app-evolucion-form
   *ngIf="formularioVisible && pacienteSeleccionado"
   [paciente]="pacienteSeleccionado"
+  [evolucion]="evolucionSelected"
   (guardarEvolucion)="onGuardarEvolucion($event, pacienteSeleccionado)"
   (cancelarFormulario)="onCancelarFormulario()"
 />
+<app-historial-evoluciones
+  *ngIf="mostrarHistorial && pacienteSeleccionado"
+  [paciente]="pacienteSeleccionado"
+  [evoluciones]="pacienteSeleccionado.evoluciones"
+  (cerrarHistorial)="mostrarHistorial = false"
+/>
+

@@ -8,18 +8,20 @@ import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
+import { HistorialEvolucionesComponent } from '../historial-evoluciones/historial-evoluciones.component';
 
 @Component({
   selector: 'app-pacientes-list',
   standalone: true,
-  imports: [CommonModule, EvolucionFormComponent],
+  imports: [CommonModule, EvolucionFormComponent, HistorialEvolucionesComponent],
   templateUrl: './pacientes-list.component.html',
   styleUrl: './pacientes-list.component.css'
 })
 export class PacientesListComponent implements OnInit {
   private getAll = inject(GetAllPacientesService);
   private addFormularioEvolucion = inject(AddEvolucionService);
-
+  evolucionSelected: Evolucion | null = null;
+  mostrarHistorial = false;
   loading = signal(true);
   pacientes = toSignal(
     this.getAll.execute().pipe(
@@ -36,12 +38,12 @@ export class PacientesListComponent implements OnInit {
   acciones = [
     {
       label: 'Ver historial',
-      callback: (paciente: Paciente) => this.verHistorial(paciente),
+      callback: (paciente: Paciente) => this.openHistorial(paciente),
       disabled: false
     },
     {
       label: 'Añadir evolución',
-      callback: (paciente: Paciente) => this.abrirFormularioEvolucion(paciente),
+      callback: (paciente: Paciente) => this.abrirFormularioCrearEvolucion(paciente),
       disabled: false
     },
     {
@@ -54,17 +56,20 @@ export class PacientesListComponent implements OnInit {
   formularioVisible = false;
   pacienteSeleccionado: Paciente | null = null;
 
-  verHistorial(paciente: Paciente) {
-    console.log('Ver historial de:', paciente);
-  }
-
-  abrirFormularioEvolucion(paciente: Paciente) {
+  abrirFormularioCrearEvolucion(paciente: Paciente) {
+    this.evolucionSelected = null;
     this.formularioVisible = true;
     this.pacienteSeleccionado = paciente;
   }
 
   verUltimaEvolucion(paciente: Paciente) {
-    console.log('Ver última evolución de:', paciente);
+    this.evolucionSelected = paciente.evoluciones[paciente.evoluciones.length - 1];
+    if (this.evolucionSelected) {
+      this.formularioVisible = true;
+      this.pacienteSeleccionado = paciente;
+    } else {
+      alert('No tiene evoluciones');
+    }
   }
 
   ngOnInit() { }
@@ -82,5 +87,11 @@ export class PacientesListComponent implements OnInit {
   onCancelarFormulario() {
     this.formularioVisible = false;
     this.pacienteSeleccionado = null;
+  }
+
+
+  openHistorial(paciente: Paciente) {
+    this.pacienteSeleccionado = paciente;
+    this.mostrarHistorial = true;
   }
 }
